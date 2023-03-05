@@ -62,6 +62,9 @@
         </fieldset>
     </form>
 
+    <div>
+        Already a user? <a href="/login.php">Login</a>
+    </div>
 </div>
 </body>
 </html>

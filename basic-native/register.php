@@ -117,5 +117,8 @@ include('views/register.html.php');
 /**
  * 💡 Improvements that you can implement:
  * - Hash the password, NEVER-EVER saved raw password to the database
- * - Try adding `password_confirmation` and make sure that the `password` and `password_confirmation` are the same
+ * - Add `password_confirmation` and make sure that the `password` and `password_confirmation` are the same
+ * - Add checking of $_POST['email'] if already exists or already a user
+ * - Add more fields like middle name, username
+ * - Add soft delete implementation
  */

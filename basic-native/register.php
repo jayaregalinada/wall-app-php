@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 /**
- * This file is for registration purposes
+ * This file is for registration purposes ONLY
  */
 
 session_start();
@@ -113,3 +113,9 @@ SQL;
 }
 
 include('views/register.html.php');
+
+/**
+ * 💡 Improvements that you can implement:
+ * - Hash the password, NEVER-EVER saved raw password to the database
+ * - Try adding `password_confirmation` and make sure that the `password` and `password_confirmation` are the same
+ */

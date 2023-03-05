@@ -15,30 +15,43 @@ if (isset($_SESSION['success'])) {
     unset($_SESSION['success']);
 }
 
-function validateField(string $value): bool {
-    // This will validate the field value if it has numeric character
+/**
+ * This will validate the field value
+ * Return ❌ `false` if the value has numeric characters
+ * Otherwise, return ✅ `true` if field value is valid
+ */
+function validateField(string $value): bool
+{
+    // Even though we can use preg_match here, let's try an old way fashion
+
     $valueToArray = str_split($value);
+    // 👆 Let's make the $value to an array, so we can iterate it
     foreach ($valueToArray as $letter) {
         if (is_numeric($letter)) {
-            return false;
+            // 👆 Let's check if each letter "is numeric" (pun intended)
+            return false; // 👈 We immediately return false, so it won't check the other characters
         }
     }
 
-    return true;
+    return true; // 👈 Always use Happy Path 🙂
 }
 
+// We implemented a CSRF (Cross-Site Request Forgery) to avoid hackers send request from our registration form
 if (empty($_SESSION['token'])) {
-    // Check if token is already
+    // Check if token is already exists
     $_SESSION['token'] = bin2hex(random_bytes(32)); // 👈 More secure and unpredictable hash
 }
 
-if (isset($_SESSION['token'], $_POST['token']) && empty($_POST['token']) && !hash_equals($_SESSION['token'], $_POST['token'])) {
+if (
+    isset($_SESSION['token'], $_POST['token']) // 👈 Check if token exists
+    && empty($_POST['token']) // 👈 Check if no value found in token upon submitting the form
+    && !hash_equals($_SESSION['token'], $_POST['token']) // 👈 A much better === (identical operator)
+) {
     $_SESSION['errors'][] = 'Token is invalid';
 }
 
 if (isset($_POST['first_name'])) {
     $_SESSION['old']['first_name'] = $_POST['first_name'];
-    // Add validation for the first_name
     if (!validateField($_POST['first_name'])) {
         $_SESSION['errors'][] = 'First name is invalid';
     }
@@ -46,7 +59,6 @@ if (isset($_POST['first_name'])) {
 
 if (isset($_POST['last_name'])) {
     $_SESSION['old']['last_name'] = $_POST['last_name'];
-    // Add validation for the last_name
     if (!validateField($_POST['last_name'])) {
         $_SESSION['errors'][] = 'Last name is invalid';
     }
@@ -54,9 +66,16 @@ if (isset($_POST['last_name'])) {
 
 if (isset($_POST['email'])) {
     $_SESSION['old']['email'] = $_POST['email'];
-    // Add validation for email
-    if (!filter_var(filter_var($_POST['email'], FILTER_SANITIZE_EMAIL), FILTER_VALIDATE_EMAIL)) {
-        // Check if email is actually valid email format
+
+    $sanitizedEmail = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+    // 👆 That will remove or FILTER any illegal characters from the email $_POST['email']
+
+    // 🎯 Practice to limit creating variables if you're NOT intended to reuse the variable
+    // if (!filter_var(filter_var($_POST['email'], FILTER_SANITIZE_EMAIL), FILTER_VALIDATE_EMAIL)) {
+    // 👆 You can use this if statement without using any variables
+    if (!filter_var($sanitizedEmail, FILTER_VALIDATE_EMAIL)) {
+        // 👆 That will validate email address format
+
         $_SESSION['errors'][] = 'Email is invalid';
     }
 }
@@ -69,7 +88,7 @@ if (isset($_POST['password'])) {
 }
 
 if (!empty($_POST) && count($_SESSION['errors']) === 0) {
-    // 👆 This will check if the form has been submitted
+    // 👆 That will check if the form has been submitted
 
     $_SESSION['old'] = []; // Reset any old fields
     $connection = require('connection.php');
@@ -87,8 +106,8 @@ SQL;
         $_SESSION['errors'][] = 'Something went wrong when trying to save to the Database';
     }
     if ($execute) {
-        // [❓] This is just the inverted version of (!$execute) statement, why not use else
-        // [✅] Nothing personal, but try to avoid else, if else as much as possible, it can be nasty sometimes
+        // [❓] This is just the inverted version of (!$execute) statement, why not use else?
+        // [✅] Nothing personal, but try to avoid using: else, if else, as much as possible, it can be nasty sometimes
         $_SESSION['success'] = 'Successful registration';
     }
 }

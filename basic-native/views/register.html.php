@@ -11,6 +11,14 @@
 <body>
 <div class="container">
     <?php
+    // Check if registration is successful
+    if (isset($_SESSION['success'])): ?>
+    <div class="alert alert-success">
+        <?php echo $_SESSION['success']; ?>
+    </div>
+    <?php endif; ?>
+
+    <?php
     // Check if errors is empty
     // You can use empty() but it's better to use count() as the $_SESSION['errors'] is an array that is countable
     if (count($_SESSION['errors']) > 0): ?>
@@ -37,14 +45,14 @@
             <div class="form-inputs">
                 <div class="name-inputs">
                     <div>
-                        <label for="first_name">First Name: <input required type="text" name="first_name"></label>
+                        <label for="first_name">First Name: <input required type="text" name="first_name" value="<?php echo $_SESSION['old']['first_name'] ?? ''; ?>"></label>
                     </div>
                     <div>
-                        <label for="last_name">Last Name: <input required type="text" name="last_name"></label>
+                        <label for="last_name">Last Name: <input required type="text" name="last_name" value="<?php echo $_SESSION['old']['last_name'] ?? ''; ?>"></label>
                     </div>
                 </div>
                 <div>
-                    <label for="email">Email: <input required type="email" name="email"></label>
+                    <label for="email">Email: <input required type="email" name="email" value="<?php echo $_SESSION['old']['email'] ?? ''; ?>"></label>
                 </div>
                 <div>
                     <label for="password">Password: <input required type="password" name="password"></label>

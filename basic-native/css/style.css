@@ -8,7 +8,6 @@ body {
     display: grid;
     place-items: center;
 }
-
 .container {
     width: 700px;
 }

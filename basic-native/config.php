@@ -7,9 +7,9 @@ declare(strict_types=1);
  * This is similar on define() function
  */
 
-// 👇 Is the same as
-// define('DB_HOST', 'localhost')
 const DB_HOST = 'localhost';
+// 👆 Is the same as
+// define('DB_HOST', 'localhost')
 const DB_USER = 'root';
 const DB_PASS = '';
 const DB_DATABASE = 'wall_basic';

@@ -15,26 +15,30 @@ if (isset($_SESSION['success'])) {
     unset($_SESSION['success']);
 }
 
-/**
- * This will validate the field value
- * Return ❌ `false` if the value has numeric characters
- * Otherwise, return ✅ `true` if field value is valid
- */
-function validateField(string $value): bool
-{
-    // Even though we can use preg_match here, let's try an old way fashion
+if (!function_exists('validate_field')) {
+// 👆 Check if there are already `validate_field()` function exists
+    /**
+     * This will validate the field value
+     * Return ❌ `false` if the value has numeric characters
+     * Otherwise, return ✅ `true` if field value is valid
+     */
+    function validate_field(string $value): bool
+    {
+        // Even though we can use preg_match here, let's try an old way fashion
 
-    $valueToArray = str_split($value);
-    // 👆 Let's make the $value to an array, so we can iterate it
-    foreach ($valueToArray as $letter) {
-        if (is_numeric($letter)) {
-            // 👆 Let's check if each letter "is numeric" (pun intended)
-            return false; // 👈 We immediately return false, so it won't check the other characters
+        $valueToArray = str_split($value);
+        // 👆 Let's make the $value to an array, so we can iterate it
+        foreach ($valueToArray as $letter) {
+            if (is_numeric($letter)) {
+                // 👆 Let's check if each letter "is numeric" (pun intended)
+                return false; // 👈 We immediately return false, so it won't check the other characters
+            }
         }
-    }
 
-    return true; // 👈 Always use Happy Path 🙂
+        return true; // 👈 Always use Happy Path 🙂
+    }
 }
+
 
 // We implemented a CSRF (Cross-Site Request Forgery) to avoid hackers send request from our registration form
 if (empty($_SESSION['token'])) {
@@ -52,14 +56,14 @@ if (
 
 if (isset($_POST['first_name'])) {
     $_SESSION['old']['first_name'] = $_POST['first_name'];
-    if (!validateField($_POST['first_name'])) {
+    if (!validate_field($_POST['first_name'])) {
         $_SESSION['errors'][] = 'First name is invalid';
     }
 }
 
 if (isset($_POST['last_name'])) {
     $_SESSION['old']['last_name'] = $_POST['last_name'];
-    if (!validateField($_POST['last_name'])) {
+    if (!validate_field($_POST['last_name'])) {
         $_SESSION['errors'][] = 'Last name is invalid';
     }
 }
@@ -121,4 +125,5 @@ include('views/register.html.php');
  * - Add checking of $_POST['email'] if already exists or already a user
  * - Add more fields like middle name, username
  * - Add soft delete implementation
+ * - Refactor token implementation as one function to avoid duplication
  */

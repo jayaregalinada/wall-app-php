@@ -5,19 +5,16 @@ declare(strict_types=1);
  * This file is for creating tables to the database
  */
 
-// 👇 This will check if this file run via CLI otherwise it will NOT execute anything
 (PHP_SAPI !== 'cli' || isset($_SERVER['HTTP_USER_AGENT'])) && die('Only for CLI');
+// 👆 That will check if this file run via CLI otherwise it will NOT execute anything
 
-// 👇 Lets get the instance of mysqli
 $con = require('connection.php');
+// 👆 Let's get the instance of mysqli
 
 $queries = [];
 
 $usersTable = constant('TABLE_USERS');
 
-// This is called HEREDOC, allowing multiline string
-// or file literal for sending input streams
-// allowing us to write NON-PHP string WITHOUT the problem of quotations
 $queries[$usersTable] = <<<SQL
 CREATE TABLE IF NOT EXISTS $usersTable (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -29,9 +26,12 @@ CREATE TABLE IF NOT EXISTS $usersTable (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 SQL;
+// The <<<SQL is called HEREDOC, allowing multiline string
+// or file literal for sending input streams
+// allowing us to write NON-PHP string WITHOUT the problem of quotations
 
-// ✅ Adding IF NOT EXISTS keyword will make sure that the table will ONLY create IF the table exists
-// ✅ Adding ON UPDATE CURRENT_TIMESTAMP will make sure that every update, it will generate a new CURRENT_TIMESTAMP
+// 🎯 Practice on adding IF NOT EXISTS when creating tables
+// 🎯 Adding ON UPDATE CURRENT_TIMESTAMP will make sure that every update, it will generate a new CURRENT_TIMESTAMP
 
 $messagesTable = constant('TABLE_MESSAGES');
 $queries[$messagesTable] = <<<SQL
@@ -74,3 +74,9 @@ foreach ($queries as $table => $query) {
 
 
 $con->close(); // ⚠️ Always close the connection
+
+/**
+ * 💡 Improvements that you can implement:
+ * - Add UNIQUE constraint to email in users table
+ * - Add Soft delete implementation
+ */

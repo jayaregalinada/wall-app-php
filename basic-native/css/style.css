@@ -1,0 +1,53 @@
+* {
+    box-sizing: border-box;
+}
+html, body {
+    height: 100%;
+}
+body {
+    display: grid;
+    place-items: center;
+}
+
+.container {
+    width: 700px;
+}
+[type='submit'] {
+    padding: 10px;
+    background-color: #3b82f6;
+    cursor: pointer;
+    color: #FFF;
+    border: 1px solid transparent;
+    font-weight: bold;
+}
+[type='submit']:hover {
+    background-color: #1d4ed8;
+}
+.name-inputs {
+    display: flex;
+    gap: 10px;
+}
+.name-inputs > div {
+    width: 100%;
+}
+input {
+    width: 100%;
+    padding: 5px;
+}
+.form-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.alert {
+    padding: 20px;
+    border: 1px solid;
+    margin-bottom: 1rem;
+}
+.alert * {
+    margin: 0;
+}
+.alert.alert-danger {
+    background-color: #fca5a5;
+    border-color: #b91c1c;
+}
